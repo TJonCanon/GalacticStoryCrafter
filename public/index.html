@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Adventure Story Generator</title>
+</head>
+<body>
+    <h1>Space Adventure Story Generator</h1>
+    <form id="storyForm">
+        <label for="spaceTraveler">Space Traveler's Name:</label>
+        <input type="text" id="spaceTraveler" name="spaceTraveler" required><br><br>
+
+        <label for="shipName">Ship Name:</label>
+        <input type="text" id="shipName" name="shipName" required><br><br>
+
+        <label for="destinationPlanet">Destination Planet:</label>
+        <input type="text" id="destinationPlanet" name="destinationPlanet" required><br><br>
+
+        <button type="submit">Generate Story</button>
+    </form>
+
+    <h2>Generated Story:</h2>
+    <div id="storyOutput"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
