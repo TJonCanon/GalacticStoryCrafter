@@ -3,16 +3,54 @@ const app = express();
 const bodyParser = require('body-parser');
 const axios = require('axios'); // For making requests to the Chat-GPT API
 const { OpenAI } = require("openai");
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb+srv://4923:holberton@cluster0.mbo0bkj.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 // Middleware for serving static files from the 'public' directory
 app.use(bodyParser.json());
-
-// // const configuration = new Configuration({
-//   apikey: "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",
-// });
 app.use(express.static('public'));
 
-const openai = new OpenAI({ apiKey: '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' });
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+});
 
+const User = mongoose.model('User', userSchema);
+
+const openai = new OpenAI({ apiKey: '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' });
+
+const users = [];
+const accessTokenSecret = 'token';
+
+app.post('/register', async (req, res) => {
+  try {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      const user = new User({ username: req.body.username, password: hashedPassword });
+      await user.save();
+      res.status(201).send('User registered');
+  } catch (error) {
+      res.status(500).send(error.message);
+  }
+});
+
+// Login endpoint
+app.post('/login', async (req, res) => {
+  try {
+      const user = await User.findOne({ username: req.body.username });
+      if (user && await bcrypt.compare(req.body.password, user.password)) {
+          const accessToken = jwt.sign({ username: user.username }, accessTokenSecret);
+          res.json({ accessToken });
+      } else {
+          res.send('Username or password incorrect');
+      }
+  } catch (error) {
+      res.status(500).send(error.message);
+  }
+});
 
 
 app.post('/generateStory', async (req, res) => {
