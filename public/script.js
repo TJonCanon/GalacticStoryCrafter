@@ -4,7 +4,7 @@ document.getElementById('storyForm').addEventListener('submit', function(e) {
   const spaceTraveler = document.getElementById('spaceTraveler').value;
   const shipName = document.getElementById('shipName').value;
   const destinationPlanet = document.getElementById('destinationPlanet').value;
-
+// fetches story from server
   fetch('/generateStory', {
       method: 'POST',
       headers: {

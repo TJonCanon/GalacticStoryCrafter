@@ -13,7 +13,7 @@ mongoose.connect('mongodb+srv://4923:holberton@cluster0.mbo0bkj.mongodb.net/?ret
 // Middleware for serving static files from the 'public' directory
 app.use(bodyParser.json());
 app.use(express.static('public'));
-
+// defines new schema for user
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true }
@@ -25,7 +25,7 @@ const openai = new OpenAI({ apiKey: 'sk-4XYSa72VK9OrKx7PhwQiT3BlbkFJlcqqcwYJW9Pg
 
 const users = [];
 const accessTokenSecret = 'token';
-
+// registers user
 app.post('/register', async (req, res) => {
   try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -52,7 +52,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
+// Middleware for authenticating JWTs
 app.post('/generateStory', async (req, res) => {
   try {
     const { spaceTraveler, shipName, destinationPlanet } = req.body;
